@@ -1,0 +1,18 @@
+{{- if gt .Values.ui.replicas 1.0 }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "docker-registry-ui.fullname" . }}-user-interface
+  labels:
+    app.kubernetes.io/component: user-interface
+    {{- include "docker-registry-ui.labels" . | nindent 4 }}
+
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: user-interface
+      {{- include "docker-registry-ui.selectorLabels" . | nindent 6 }}
+{{- end }}
+
